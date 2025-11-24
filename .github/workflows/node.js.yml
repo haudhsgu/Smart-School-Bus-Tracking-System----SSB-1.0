@@ -50,7 +50,7 @@ jobs:
           context: .
           push: true
           # Thay 'latest' bằng tên repo của bạn
-          tags: ${{ secrets.DOCKER_USERNAME }}/do-an-server:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/test:latest
 
       # 4. Gọi điện cho Render bảo Deploy đi (CD)
       - name: Trigger Render Deploy
