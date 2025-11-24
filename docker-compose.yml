@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: ssb-database
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-ssb10}
+      MYSQL_USER: ${MYSQL_USER:-ssbuser}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ssbpassword}
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./packages/backend/database/ssb10.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - ssb-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD:-rootpassword}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile
+    container_name: ssb-backend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: ${BACKEND_PORT:-5000}
+      DATABASE_URL: mysql://${MYSQL_USER:-ssbuser}:${MYSQL_PASSWORD:-ssbpassword}@db:3306/${MYSQL_DATABASE:-ssb10}
+      JWT_SECRET: ${JWT_SECRET:-your-secret-key-change-this}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+    ports:
+      - "${BACKEND_PORT:-5000}:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ssb-network
+    volumes:
+      - ./packages/backend:/app
+      - /app/node_modules
+    command: sh -c "npx prisma db push --accept-data-loss && npm start"
+
+  # Frontend
+  frontend:
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile
+    container_name: ssb-frontend
+    restart: unless-stopped
+    ports:
+      - "${FRONTEND_PORT:-5173}:80"
+    depends_on:
+      - backend
+    networks:
+      - ssb-network
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
+
+networks:
+  ssb-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

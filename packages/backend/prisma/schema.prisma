@@ -13,8 +13,8 @@ model user {
   hoTen        String?
   soDienThoai  String?
   email        String?
-  quanlyxebuyt quanlyxebuyt?
   phuhuynh     phuhuynh?
+  quanlyxebuyt quanlyxebuyt?
   taixe        taixe?
 }
 
@@ -29,15 +29,15 @@ model taixe {
   userId    Int?        @unique
   hoTen     String
   trangThai String?
-  user      user?       @relation(fields: [userId], references: [userId])
   lichtrinh lichtrinh[]
+  user      user?       @relation(fields: [userId], references: [userId])
 }
 
 model phuhuynh {
   phuHuynhId Int        @id @default(autoincrement())
   userId     Int        @unique
-  user       user       @relation(fields: [userId], references: [userId], onDelete: Cascade)
   hocsinh    hocsinh[]
+  user       user       @relation(fields: [userId], references: [userId], onDelete: Cascade)
   thongbao   thongbao[]
 }
 
@@ -49,7 +49,9 @@ model hocsinh {
   diemDon    String?
   diemTra    String?
   phuHuynhId Int?
-  phuhuynh   phuhuynh? @relation(fields: [phuHuynhId], references: [phuHuynhId], onDelete: SetNull)
+  phuhuynh   phuhuynh? @relation(fields: [phuHuynhId], references: [phuHuynhId])
+
+  @@index([phuHuynhId], map: "hocsinh_phuHuynhId_fkey")
 }
 
 model xebuyt {
@@ -58,8 +60,8 @@ model xebuyt {
   bienSo    String?
   sucChua   Int?
   trangThai String?
-  vitri     vitri[]
   lichtrinh lichtrinh[]
+  vitri     vitri[]
 }
 
 model vitri {
@@ -69,6 +71,8 @@ model vitri {
   kinhdo   Float?
   thoiGian DateTime?
   xebuyt   xebuyt    @relation(fields: [xeBuytId], references: [xeBuytId], onDelete: Cascade)
+
+  @@index([xeBuytId], map: "vitri_xeBuytId_fkey")
 }
 
 model diemdung {
@@ -90,10 +94,11 @@ model tuyenduong_diemdung {
   tuyenDuongId Int
   diemDungId   Int
   thuTu        Int
-  tuyenduong   tuyenduong @relation(fields: [tuyenDuongId], references: [tuyenDuongId], onDelete: Cascade)
   diemdung     diemdung   @relation(fields: [diemDungId], references: [diemDungId], onDelete: Cascade)
+  tuyenduong   tuyenduong @relation(fields: [tuyenDuongId], references: [tuyenDuongId], onDelete: Cascade)
 
   @@id([tuyenDuongId, diemDungId])
+  @@index([diemDungId], map: "tuyenduong_diemdung_diemDungId_fkey")
 }
 
 model lichtrinh {
@@ -105,9 +110,13 @@ model lichtrinh {
   tuyenDuongId Int?
   taiXeId      Int?
   xeBuytId     Int?
+  taixe        taixe?      @relation(fields: [taiXeId], references: [taiXeId])
   tuyenduong   tuyenduong? @relation(fields: [tuyenDuongId], references: [tuyenDuongId])
   xebuyt       xebuyt?     @relation(fields: [xeBuytId], references: [xeBuytId])
-  taixe        taixe?      @relation(fields: [taiXeId], references: [taiXeId])
+
+  @@index([taiXeId], map: "lichtrinh_taiXeId_fkey")
+  @@index([tuyenDuongId], map: "lichtrinh_tuyenDuongId_fkey")
+  @@index([xeBuytId], map: "lichtrinh_xeBuytId_fkey")
 }
 
 model thongbao {
@@ -117,4 +126,6 @@ model thongbao {
   loai        String?
   thoiGianGui DateTime?
   phuhuynh    phuhuynh? @relation(fields: [phuHuynhId], references: [phuHuynhId], onDelete: Cascade)
+
+  @@index([phuHuynhId], map: "thongbao_phuHuynhId_fkey")
 }

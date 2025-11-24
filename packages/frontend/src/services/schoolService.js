@@ -1,7 +1,8 @@
 // frontend/src/services/schoolService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/school";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = `${API_BASE_URL}/api/school`;
 
 // Axios sẽ tự động thêm token từ authService interceptor
 

@@ -5,7 +5,8 @@ import { startAutoLogoutTimer, clearAutoLogoutTimer } from "../utils/autoLogout"
 // === CẤU HÌNH MOCK MODE ===
 const MOCK_MODE = false; // Đổi thành false nếu muốn dùng backend thật
 
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_AUTH_URL = `${API_URL}/api/auth`;
 
 // Dữ liệu giả lập cho 3 role
 const mockUsers = {
@@ -71,7 +72,7 @@ const authService = {
   login: async (email, password) => {
     if (!MOCK_MODE) {
       // DÙNG BACKEND THẬT
-      const response = await axios.post(`http://localhost:5000/api/auth/login`, { email, password });
+      const response = await axios.post(`${API_AUTH_URL}/login`, { email, password });
       if (response.data.success) {
         const { token, user } = response.data.data;
         localStorage.setItem("token", token);
@@ -120,7 +121,7 @@ const authService = {
   logout: async () => {
     if (!MOCK_MODE) {
       try {
-        await axios.post(`http://localhost:5000/api/auth/logout`);
+        await axios.post(`${API_AUTH_URL}/logout`);
       } catch (error) {
         console.error("Logout error:", error);
       }
@@ -167,7 +168,7 @@ const authService = {
   // GIẢ LẬP LẤY USER TỪ SERVER
   fetchCurrentUser: async () => {
     if (!MOCK_MODE) {
-      const response = await axios.get(`http://localhost:5000/api/auth/me`);
+      const response = await axios.get(`${API_AUTH_URL}/me`);
       if (response.data.success) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         return response.data.user;
