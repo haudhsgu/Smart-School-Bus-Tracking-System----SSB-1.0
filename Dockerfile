@@ -1,22 +1,28 @@
-# ... (Phần Giai đoạn 1 Build Frontend giữ nguyên) ...
+# --- GIAI ĐOẠN 1: BUILDER (Frontend) ---
+FROM node:18-alpine AS builder  # <--- Dòng bắt đầu Giai đoạn 1
+WORKDIR /app/frontend
 
-# --- GIAI ĐOẠN 2: Dựng Backend và GỘP ---
-FROM node:18-alpine AS builder
+COPY packages/frontend/package*.json ./
+RUN npm install
+COPY packages/frontend/ .
+RUN npm run build
+
+
+# --- GIAI ĐOẠN 2: RUNNER (Backend) ---
+# 🔥 ÔNG ĐANG THIẾU DÒNG NÀY NÈ 🔥
+FROM node:18-alpine 
+
 WORKDIR /app
 
-# 3. Chui vào thư mục backend cài đặt
+# Cài đặt backend
 COPY packages/backend/package*.json ./
 RUN npm install
-
-# 4. Copy toàn bộ code backend
 COPY packages/backend/ .
-
-# 🔥 THÊM DÒNG NÀY VÀO ĐÂY (Sau bước Copy code) 🔥
-# Để nó đọc schema và tạo client cho Linux
 RUN npx prisma generate
 
-# ... (Phần Copy Frontend và CMD giữ nguyên) ...
-COPY --from=builder /app/frontend/dist ./public
+# Copy kết quả từ giai đoạn 1 (builder) sang giai đoạn 2
+COPY --from=builder /app/frontend/dist ./public 
 
+# Backend chạy port nào thì expose port đó (ví dụ 3000, không phải 5173 của Vite nhé)
 EXPOSE 5173
 CMD ["npm", "start"]
