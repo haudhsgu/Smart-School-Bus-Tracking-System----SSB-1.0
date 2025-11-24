@@ -1,7 +1,7 @@
 # ... (Phần Giai đoạn 1 Build Frontend giữ nguyên) ...
 
 # --- GIAI ĐOẠN 2: Dựng Backend và GỘP ---
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 WORKDIR /app
 
 # 3. Chui vào thư mục backend cài đặt
