@@ -1,5 +1,6 @@
 # --- GIAI ĐOẠN 1: BUILDER (Frontend) ---
-FROM node:18-alpine AS builder
+# 👇 Đổi alpine thành slim
+FROM node:18-slim AS builder
 WORKDIR /app/frontend
 
 COPY packages/frontend/package*.json ./
@@ -9,20 +10,26 @@ RUN npm run build
 
 
 # --- GIAI ĐOẠN 2: RUNNER (Backend) ---
-# 🔥 ÔNG ĐANG THIẾU DÒNG NÀY NÈ 🔥
-FROM node:18-alpine 
+# 👇 Đổi alpine thành slim
+FROM node:18-slim
+
+# 👇 Thêm dòng này để cài OpenSSL cho Prisma (QUAN TRỌNG)
+RUN apt-get update -y && apt-get install -y openssl
 
 WORKDIR /app
 
 # Cài đặt backend
 COPY packages/backend/package*.json ./
 RUN npm install
+
+# Copy code backend
 COPY packages/backend/ .
+
+# Tạo Prisma Client (Nó sẽ tự nhận diện môi trường Slim mới này)
 RUN npx prisma generate
 
-# Copy kết quả từ giai đoạn 1 (builder) sang giai đoạn 2
-COPY --from=builder /app/frontend/dist ./public 
+# Copy kết quả build Frontend sang
+COPY --from=builder /app/frontend/dist ./public
 
-# Backend chạy port nào thì expose port đó (ví dụ 3000, không phải 5173 của Vite nhé)
-EXPOSE 5173
+EXPOSE 3000
 CMD ["npm", "start"]
