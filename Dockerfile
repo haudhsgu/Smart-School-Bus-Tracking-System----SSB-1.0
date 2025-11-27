@@ -1,5 +1,5 @@
 # --- GIAI ĐOẠN 1: BUILDER (Frontend) ---
-FROM node:18-alpine AS builder  # <--- Dòng bắt đầu Giai đoạn 1
+FROM node:18-alpine AS builder
 WORKDIR /app/frontend
 
 COPY packages/frontend/package*.json ./
