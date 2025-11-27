@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/auth', authRoutes);
 app.use('/api/school', schoolRoutes);
 // Test route
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({ 
     message: '🚌 School Bus Tracking API',
     version: '1.0.0',
