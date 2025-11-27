@@ -5,7 +5,7 @@ import { startAutoLogoutTimer, clearAutoLogoutTimer } from "../utils/autoLogout"
 // === CẤU HÌNH MOCK MODE ===
 const MOCK_MODE = false; // Đổi thành false nếu muốn dùng backend thật
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL || "";
 const API_AUTH_URL = `${API_URL}/api/auth`;
 
 // Dữ liệu giả lập cho 3 role
