@@ -63,8 +63,8 @@ services:
       - backend
     networks:
       - ssb-network
-    environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
+    # environment:
+    #   VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
 
 networks:
   ssb-network:
