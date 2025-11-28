@@ -26,7 +26,7 @@ SET time_zone = "+00:00";
 --
 -- Cấu trúc bảng cho bảng `diemdung`
 --
-
+SET SESSION sql_require_primary_key = 0;
 CREATE TABLE `diemdung` (
   `diemDungId` int(11) NOT NULL,
   `tenDiemDung` varchar(191) NOT NULL,
