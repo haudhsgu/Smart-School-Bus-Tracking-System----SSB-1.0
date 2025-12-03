@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 -- Cấu trúc bảng cho bảng `diemdung`
 --
 SET SESSION sql_require_primary_key = 0;
-CREATE TABLE `diemdung` (
+CREATE TABLE IF NOT EXISTS `diemdung` (
   `diemDungId` int(11) NOT NULL,
   `tenDiemDung` varchar(191) NOT NULL,
   `diaChi` varchar(191) DEFAULT NULL
@@ -55,7 +55,7 @@ INSERT INTO `diemdung` (`diemDungId`, `tenDiemDung`, `diaChi`) VALUES
 -- Cấu trúc bảng cho bảng `hocsinh`
 --
 
-CREATE TABLE `hocsinh` (
+CREATE TABLE IF NOT EXISTS `hocsinh` (
   `hocSinhId` int(11) NOT NULL,
   `maHS` varchar(191) NOT NULL,
   `hoTen` varchar(191) DEFAULT NULL,
@@ -87,7 +87,7 @@ INSERT INTO `hocsinh` (`hocSinhId`, `maHS`, `hoTen`, `lop`, `diemDon`, `diemTra`
 -- Cấu trúc bảng cho bảng `lichtrinh`
 --
 
-CREATE TABLE `lichtrinh` (
+CREATE TABLE IF NOT EXISTS `lichtrinh` (
   `lichTrinhId` int(11) NOT NULL,
   `maLich` varchar(191) NOT NULL,
   `ngay` date DEFAULT NULL,
@@ -120,7 +120,7 @@ INSERT INTO `lichtrinh` (`lichTrinhId`, `maLich`, `ngay`, `gioKhoiHanh`, `gioKet
 -- Cấu trúc bảng cho bảng `phuhuynh`
 --
 
-CREATE TABLE `phuhuynh` (
+CREATE TABLE IF NOT EXISTS `phuhuynh` (
   `phuHuynhId` int(11) NOT NULL,
   `userId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -142,7 +142,7 @@ INSERT INTO `phuhuynh` (`phuHuynhId`, `userId`) VALUES
 -- Cấu trúc bảng cho bảng `quanlyxebuyt`
 --
 
-CREATE TABLE `quanlyxebuyt` (
+CREATE TABLE IF NOT EXISTS `quanlyxebuyt` (
   `quanLyId` int(11) NOT NULL,
   `userId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -162,7 +162,7 @@ INSERT INTO `quanlyxebuyt` (`quanLyId`, `userId`) VALUES
 -- Cấu trúc bảng cho bảng `taixe`
 --
 
-CREATE TABLE `taixe` (
+CREATE TABLE IF NOT EXISTS `taixe` (
   `taiXeId` int(11) NOT NULL,
   `userId` int(11) DEFAULT NULL,
   `hoTen` varchar(191) NOT NULL,
@@ -191,7 +191,7 @@ INSERT INTO `taixe` (`taiXeId`, `userId`, `hoTen`, `trangThai`) VALUES
 -- Cấu trúc bảng cho bảng `thongbao`
 --
 
-CREATE TABLE `thongbao` (
+CREATE TABLE IF NOT EXISTS `thongbao` (
   `thongBaoId` int(11) NOT NULL,
   `phuHuynhId` int(11) DEFAULT NULL,
   `noiDung` varchar(191) DEFAULT NULL,
@@ -221,7 +221,7 @@ INSERT INTO `thongbao` (`thongBaoId`, `phuHuynhId`, `noiDung`, `loai`, `thoiGian
 -- Cấu trúc bảng cho bảng `tuyenduong`
 --
 
-CREATE TABLE `tuyenduong` (
+CREATE TABLE IF NOT EXISTS `tuyenduong` (
   `tuyenDuongId` int(11) NOT NULL,
   `maTuyen` varchar(191) NOT NULL,
   `tenTuyen` varchar(191) DEFAULT NULL
@@ -244,7 +244,7 @@ INSERT INTO `tuyenduong` (`tuyenDuongId`, `maTuyen`, `tenTuyen`) VALUES
 -- Cấu trúc bảng cho bảng `tuyenduong_diemdung`
 --
 
-CREATE TABLE `tuyenduong_diemdung` (
+CREATE TABLE IF NOT EXISTS `tuyenduong_diemdung` (
   `tuyenDuongId` int(11) NOT NULL,
   `diemDungId` int(11) NOT NULL,
   `thuTu` int(11) NOT NULL
@@ -272,7 +272,7 @@ INSERT INTO `tuyenduong_diemdung` (`tuyenDuongId`, `diemDungId`, `thuTu`) VALUES
 -- Cấu trúc bảng cho bảng `user`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `userId` int(11) NOT NULL,
   `userCode` varchar(191) NOT NULL,
   `hoTen` varchar(191) DEFAULT NULL,
@@ -303,7 +303,7 @@ INSERT INTO `user` (`userId`, `userCode`, `hoTen`, `soDienThoai`, `email`, `pass
 -- Cấu trúc bảng cho bảng `vitri`
 --
 
-CREATE TABLE `vitri` (
+CREATE TABLE IF NOT EXISTS `vitri` (
   `viTriId` int(11) NOT NULL,
   `xeBuytId` int(11) NOT NULL,
   `vido` double DEFAULT NULL,
@@ -317,7 +317,7 @@ CREATE TABLE `vitri` (
 -- Cấu trúc bảng cho bảng `xebuyt`
 --
 
-CREATE TABLE `xebuyt` (
+CREATE TABLE IF NOT EXISTS `xebuyt` (
   `xeBuytId` int(11) NOT NULL,
   `maXe` varchar(191) NOT NULL,
   `bienSo` varchar(191) DEFAULT NULL,
@@ -347,7 +347,7 @@ INSERT INTO `xebuyt` (`xeBuytId`, `maXe`, `bienSo`, `sucChua`, `trangThai`) VALU
 -- Cấu trúc bảng cho bảng `_prisma_migrations`
 --
 
-CREATE TABLE `_prisma_migrations` (
+CREATE TABLE IF NOT EXISTS `_prisma_migrations` (
   `id` varchar(36) NOT NULL,
   `checksum` varchar(64) NOT NULL,
   `finished_at` datetime(3) DEFAULT NULL,
